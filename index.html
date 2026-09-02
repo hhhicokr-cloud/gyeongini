@@ -26,6 +26,664 @@
 const { useState, useMemo, useContext, createContext } = React;
 
 /* =========================================================================
+   ★★★ 브릿지 시상 대상자 — 여기만 교체하시면 됩니다 ★★★
+   -------------------------------------------------------------------------
+   [고하이캡 브릿지]  "코드": 전월 구간(10 / 20 / 30)
+   [주력보종 브릿지]  대상자 코드를 목록으로 나열
+   ========================================================================= */
+
+/* 추가시상 1 · 고하이캡 브릿지 (8/18~8/31 실적 구간) */
+const BRIDGE_HC = {
+  "955187": 20,
+  "972516": 30,
+  "1C9554": 30,
+  "138424": 20,
+  "1D9076": 20,
+  "970513": 20,
+  "1D3967": 10,
+  "1D2299": 30,
+  "051798": 10,
+  "1D8042": 10,
+  "1D6850": 30,
+  "194280": 30,
+  "1D5709": 20,
+  "198086": 20,
+  "114109": 10,
+  "9A1266": 10,
+  "981480": 10,
+  "968709": 30,
+  "9A6502": 30,
+  "1D9212": 30,
+  "1D8406": 10,
+  "976112": 10,
+  "1D3429": 30,
+  "1D9337": 30,
+  "077519": 30,
+  "960697": 20,
+  "1D1551": 30,
+  "1C7457": 20,
+  "1D8033": 10,
+  "1D8407": 20,
+  "944732": 20,
+  "1D5705": 10,
+  "037843": 20,
+  "1D8169": 10,
+  "112360": 10,
+  "1D9302": 20,
+  "9A0479": 20,
+  "1B1547": 20,
+  "827670": 30,
+  "953308": 10,
+  "095631": 10,
+  "127236": 20,
+  "129740": 10,
+  "986534": 10,
+  "957688": 30,
+  "1D8409": 10,
+  "1D8951": 10,
+  "964375": 30,
+  "192690": 30,
+  "1D4241": 20,
+  "043007": 10,
+  "1A0581": 10,
+  "1D9475": 30,
+  "1D4529": 10,
+  "128585": 10,
+  "917850": 20,
+  "148030": 30,
+  "9A6852": 30,
+  "110706": 10,
+  "102085": 10,
+  "143118": 20,
+  "965023": 20,
+  "969682": 10,
+  "913660": 10,
+  "979956": 10,
+  "036037": 20,
+  "1C6331": 30,
+  "956707": 30,
+  "1D2974": 30,
+  "126765": 10,
+  "9A5022": 30,
+  "1D0110": 30,
+  "971493": 30,
+  "1C2236": 10,
+  "110417": 10,
+  "154020": 10,
+  "1B8281": 20,
+  "944288": 30,
+  "754230": 30,
+  "1C2225": 20,
+  "1B6230": 30,
+  "9A0459": 10,
+  "1B8332": 20,
+  "1B7261": 20,
+  "033968": 30,
+  "9A6606": 10,
+  "9A6758": 20,
+  "987586": 30,
+  "950559": 30,
+  "194755": 30,
+  "1A3983": 30,
+  "989158": 30,
+  "9A6605": 30,
+  "961894": 30,
+  "1A0026": 30,
+  "1A0923": 30,
+  "1A1948": 30,
+  "1D8629": 30,
+  "1B3603": 30,
+  "1A1140": 20,
+  "974069": 30,
+  "119804": 30,
+  "1D9473": 20,
+  "1D9321": 30,
+  "1A9026": 30,
+  "119650": 30,
+  "130434": 30,
+  "1C5824": 30,
+  "1C5943": 20,
+  "962563": 30,
+  "1D9327": 30,
+  "1D6895": 20,
+  "146400": 20,
+  "954908": 20,
+  "1A3587": 20,
+  "1D9349": 20,
+  "1D9293": 20,
+  "1C9210": 10,
+  "1D7779": 20,
+  "1A6261": 20,
+  "1D8244": 20,
+  "971497": 20,
+  "1D5617": 20,
+  "1D8695": 10,
+  "1D8792": 20,
+  "1D9497": 20,
+  "1D8176": 10,
+  "1C0542": 20,
+  "146755": 20,
+  "105383": 20,
+  "1D8786": 20,
+  "1D4773": 20,
+  "1C1117": 20,
+  "1D7590": 10,
+  "196215": 20,
+  "1D9093": 10,
+  "1D7382": 20,
+  "1B0266": 20,
+  "1B6625": 20,
+  "1C4501": 20,
+  "1C5482": 20,
+  "1D6463": 10,
+  "1D6046": 30,
+  "1C9173": 20,
+  "1C2793": 20,
+  "1B3898": 10,
+  "066080": 30,
+  "1D8650": 30,
+  "1D5164": 30,
+  "118917": 30,
+  "1D4492": 30,
+  "9A5021": 30,
+  "1D4516": 10,
+  "078102": 30,
+  "1B8830": 20,
+  "1A1163": 10,
+  "1D9419": 20,
+  "1D7885": 20,
+  "974767": 30,
+  "1A6488": 10,
+  "143400": 30,
+  "123158": 30,
+  "1D9120": 10,
+  "1D9474": 20,
+  "1D9360": 10,
+  "9A2334": 30,
+  "1B5676": 10,
+  "1A8275": 20,
+  "9A0458": 30,
+  "979224": 20,
+  "980578": 10,
+  "959295": 20,
+  "1D9472": 10,
+  "1D9018": 20,
+  "1B6007": 10,
+  "1D9091": 10,
+  "1D9488": 20,
+  "971027": 20,
+  "1D4821": 10,
+  "9A3736": 30,
+  "1D8239": 10,
+  "1A7626": 10,
+  "1D7456": 10,
+  "1D8054": 10,
+  "1C1197": 10,
+  "1A4683": 10,
+  "129463": 10,
+  "1D8030": 10,
+  "145693": 20,
+  "1B7118": 10,
+  "1D7384": 10,
+  "1B0919": 10,
+  "1D3181": 10,
+  "1D8803": 10,
+  "1D9009": 10,
+  "097220": 30,
+  "968545": 20,
+  "943570": 10,
+  "1D7383": 10,
+  "191818": 10,
+  "085596": 10,
+  "1D9323": 30,
+  "105053": 10,
+  "1D8062": 10,
+  "1A6668": 10,
+  "1D9209": 10,
+  "1C6093": 10,
+  "1A4015": 10,
+  "1D5299": 10,
+  "1D7242": 20,
+  "1D9210": 20,
+  "1C5480": 10,
+  "147894": 20,
+  "1D8043": 10,
+  "1A9200": 20,
+  "1A4824": 10,
+  "192681": 10,
+  "1B7361": 10,
+  "1C4697": 10,
+  "1D6328": 10,
+  "159615": 10,
+  "066731": 10,
+  "141430": 10,
+  "1C7998": 20,
+  "141334": 10,
+  "1C5086": 10,
+  "1D8032": 10,
+  "118400": 20,
+  "1D8906": 10,
+  "118525": 20,
+  "1A3319": 10,
+  "1D8834": 10,
+  "1C9209": 10,
+  "983373": 10,
+  "1B3525": 10,
+  "1A2821": 10,
+  "966868": 10,
+  "1C7924": 10,
+  "195643": 10,
+  "116214": 10,
+  "1C4057": 10,
+  "968007": 10,
+  "106213": 10,
+  "190542": 20,
+  "133890": 10,
+  "969097": 30,
+  "983701": 30,
+  "1B5141": 20,
+  "1D6828": 10,
+  "1A8075": 10,
+  "1D8835": 10,
+  "067058": 10,
+  "139196": 10,
+  "1B8053": 10,
+  "1D5613": 10,
+  "109266": 10,
+  "1D5312": 10,
+  "135591": 10,
+  "1C9706": 10,
+  "951313": 10,
+  "1D1862": 10,
+  "1A9179": 20,
+  "1B2644": 10,
+  "073283": 10,
+  "1B2221": 20,
+  "1B6903": 10,
+  "105796": 10,
+  "1B4911": 10,
+  "1D4203": 10,
+  "089560": 30,
+  "1C6861": 10,
+  "1C7396": 10,
+  "129498": 10,
+  "1D8020": 10,
+  "1D7373": 10,
+  "1C9686": 10,
+  "1A6283": 10,
+  "077182": 10,
+  "1B8369": 10,
+  "109265": 10,
+  "1D2327": 20,
+  "976318": 30,
+  "141551": 10,
+  "1A8517": 10,
+  "954909": 20,
+  "123798": 20,
+  "951924": 20,
+  "131457": 10,
+  "968775": 20,
+  "1A0180": 20,
+  "971250": 10,
+  "9A0605": 10,
+  "1D8055": 10,
+  "1C3544": 30,
+  "126769": 20,
+  "110538": 20,
+  "1C2722": 20,
+  "1A7689": 30,
+  "119857": 10,
+  "1B1568": 10,
+  "111383": 20,
+  "986047": 10,
+  "1D7101": 20,
+  "1A7317": 10,
+  "193338": 20,
+  "1C5061": 30,
+  "1D9304": 10,
+  "982555": 10,
+  "136541": 10,
+  "1D8836": 10,
+  "1D9095": 10,
+  "1D9387": 20,
+  "197110": 10,
+  "1D8371": 30,
+  "1D9348": 20,
+  "118035": 10,
+  "979187": 10,
+  "1A9220": 20,
+  "9A2113": 10,
+  "1A1540": 10,
+  "1D5640": 10,
+  "1D8802": 10,
+  "979959": 30,
+  "1D9320": 30,
+  "094802": 20,
+  "1C9657": 10,
+  "123232": 10,
+  "1D9291": 30,
+  "9A0480": 10,
+  "1D9336": 20,
+  "089367": 10,
+  "1D9328": 20,
+  "1D3635": 20,
+  "1D9322": 30,
+  "1D6321": 10,
+  "1C0266": 10,
+  "1C2727": 10,
+  "1D7777": 10,
+  "1D2524": 10,
+  "964523": 10,
+  "971613": 10,
+  "1D6327": 10,
+  "1D8078": 10,
+  "1D9326": 30,
+  "1D2778": 20,
+  "062714": 10,
+  "1D3170": 10,
+  "119774": 30,
+  "137896": 10,
+  "197924": 10,
+  "1D9214": 30,
+  "924660": 10,
+  "967878": 10,
+};
+
+/* 추가시상 2 · 주력보종 브릿지 (8/24~8/31 실적 10만 구간 달성자) */
+const BRIDGE_MAIN = [
+  "1C9554",
+  "138424",
+  "970513",
+  "1D2299",
+  "1D8042",
+  "1D6850",
+  "1D5709",
+  "9A6502",
+  "973341",
+  "1D3429",
+  "077519",
+  "1D1551",
+  "1D8033",
+  "944732",
+  "037843",
+  "112360",
+  "1D9302",
+  "1D6764",
+  "952188",
+  "827670",
+  "953308",
+  "127236",
+  "129740",
+  "957688",
+  "138420",
+  "1D8409",
+  "964375",
+  "1D4241",
+  "128585",
+  "917850",
+  "148030",
+  "9A6852",
+  "110706",
+  "965023",
+  "969682",
+  "979956",
+  "1C6331",
+  "1D2974",
+  "971493",
+  "1C2236",
+  "1B8281",
+  "754230",
+  "1C2225",
+  "9A0459",
+  "1D4113",
+  "1B8332",
+  "033968",
+  "9A6758",
+  "987586",
+  "950559",
+  "194755",
+  "1A3983",
+  "989158",
+  "9A6605",
+  "961894",
+  "1A0026",
+  "1A0923",
+  "1A1948",
+  "1D8629",
+  "1B3603",
+  "1A1140",
+  "974069",
+  "119804",
+  "1D9473",
+  "1D9321",
+  "1A9026",
+  "119650",
+  "130434",
+  "1C5824",
+  "1C5943",
+  "962563",
+  "1D9327",
+  "1D6857",
+  "1D9211",
+  "1D6895",
+  "146400",
+  "954908",
+  "1A3587",
+  "1D9349",
+  "1D9293",
+  "1C9210",
+  "1D7779",
+  "1A6261",
+  "1D8244",
+  "971497",
+  "1D5617",
+  "1D8695",
+  "1D8792",
+  "1D9497",
+  "1D8176",
+  "1C0542",
+  "146755",
+  "105383",
+  "1D8786",
+  "1D4773",
+  "1C1117",
+  "1D7590",
+  "1D9093",
+  "1D7382",
+  "1B0266",
+  "1B6625",
+  "1C4501",
+  "1C5482",
+  "1D6046",
+  "1C9173",
+  "1C2793",
+  "1B3898",
+  "066080",
+  "972662",
+  "1D8650",
+  "1D5164",
+  "118917",
+  "1D4492",
+  "9A5021",
+  "120221",
+  "1D4516",
+  "078102",
+  "1D1641",
+  "1B8830",
+  "1C6749",
+  "1A1163",
+  "1D9419",
+  "1D7885",
+  "974767",
+  "1A6488",
+  "1D8080",
+  "143400",
+  "123158",
+  "1D9120",
+  "1D9474",
+  "1D6042",
+  "1D9360",
+  "1D9420",
+  "9A2334",
+  "197679",
+  "196435",
+  "1B5676",
+  "951494",
+  "1A8275",
+  "987106",
+  "9A0458",
+  "979224",
+  "1D7247",
+  "980578",
+  "959295",
+  "1D9472",
+  "1D4721",
+  "1D9018",
+  "1B6007",
+  "1D9091",
+  "1D9488",
+  "971027",
+  "1D4821",
+  "9A3736",
+  "1D8239",
+  "1A7626",
+  "1D7456",
+  "1D8054",
+  "1C1197",
+  "1A4683",
+  "129463",
+  "9A2335",
+  "1D8030",
+  "145693",
+  "1B7118",
+  "1D7384",
+  "1D3181",
+  "1D8803",
+  "1D9009",
+  "097220",
+  "968545",
+  "943570",
+  "1D7383",
+  "191818",
+  "085596",
+  "1D9323",
+  "105053",
+  "1D8062",
+  "1A6668",
+  "1D9209",
+  "1C6093",
+  "1A4015",
+  "1D5299",
+  "1D7242",
+  "1D9210",
+  "1C5480",
+  "147894",
+  "1D8043",
+  "1A9200",
+  "1A4824",
+  "192681",
+  "1B7361",
+  "1C4697",
+  "1D6328",
+  "159615",
+  "066731",
+  "141430",
+  "1C7998",
+  "141334",
+  "1C5086",
+  "1D8032",
+  "118400",
+  "1D8906",
+  "1A3319",
+  "197672",
+  "1A3590",
+  "1D8834",
+  "1C9209",
+  "983373",
+  "1B3525",
+  "1A2821",
+  "109541",
+  "966868",
+  "1C7924",
+  "195643",
+  "116214",
+  "1C4057",
+  "968007",
+  "137842",
+  "106213",
+  "190542",
+  "133890",
+  "969097",
+  "1B1603",
+  "983701",
+  "1D6828",
+  "1A8075",
+  "1D8835",
+  "1C2799",
+  "067058",
+  "139196",
+  "1D5613",
+  "1C0126",
+  "1B8365",
+  "109266",
+  "1D5312",
+  "135591",
+  "1C9706",
+  "198343",
+  "951313",
+  "1D1862",
+  "1A9179",
+  "1B2644",
+  "047856",
+  "073283",
+  "138899",
+  "1B2221",
+  "1B6903",
+  "105796",
+  "1B4911",
+  "034021",
+  "1D4203",
+  "089560",
+  "9A5338",
+  "108326",
+  "129498",
+  "109265",
+  "951924",
+  "1D9095",
+  "9A2113",
+  "979959",
+  "094802",
+  "191787",
+  "1D7777",
+  "971613",
+  "1D8078",
+  "967878",
+  "072402",
+];
+
+const BR1 = {
+  title: "고하이캡 브릿지 시상",
+  basis: "8월 3-4주차 (8/18~8/31)",
+  period: "9월 1-2주차 · 9/1(화) ~ 9/11(금)",
+  deadline: "9/11(금)",
+  need: 100000,
+  scope: "인보험 중 하이캡 배수 17배 이상 계약만 합산",
+  pay: { 10: 500000, 20: 1000000, 30: 1500000 },
+};
+
+/* 주력보종 목록 */
+const MAIN_PRODUCTS = ["퍼펙트플러스", "간편보험", "인생의품격", "굿앤굿1540", "굿앤굿스타"];
+const BR2 = {
+  title: "주력보종 브릿지 시상",
+  basis: "8월 4주차 (8/24~8/31)",
+  period: "9월 1주차 · 9/1(화) ~ 9/4(금)",
+  deadline: "9/4(금)",
+  need: 100000,
+  scope: "주력보종 실적 (연만기 · 하이캡 조건 없음)",
+  pay: 240000,
+};
+
+/* =========================================================================
    ★★★ 플래너 명단 — "코드": "지점|성명" ★★★
    ========================================================================= */
 const PLANNER_CODES = {
@@ -1506,6 +2164,7 @@ function GyeonginiApp() {
   const [shareOpen, setShareOpen] = useState(false);
   const [shareBody, setShareBody] = useState("");
   const [flash, setFlash] = useState(false);
+  const [bridgeOpen, setBridgeOpen] = useState(false);
   const sumRef = React.useRef(null);
 
   /* 시뮬 반영 후 합계 카드로 이동 + 잠깐 강조 */
@@ -1522,6 +2181,11 @@ function GyeonginiApp() {
   const b = num(g12);          // 9/1~9/2 (시상 2에만 사용)
   const c = num(g34);          // 9/3~9/4
   const a = b + c;             // 9/1~9/4 합산 (시상 1·3·4에 사용)
+
+  /* 브릿지 시상 대상자 여부 */
+  const brHC = lookup.code ? BRIDGE_HC[lookup.code] : null;                  // 10 / 20 / 30
+  const brMain = lookup.code ? BRIDGE_MAIN.indexOf(lookup.code) >= 0 : false;
+  const isBridge = !!brHC || brMain;
   const open1 = true, open2 = true, open3 = true, open4 = true;
 
   const r = useMemo(() => {
@@ -1581,6 +2245,7 @@ function GyeonginiApp() {
       const [branch, name] = PLANNER_CODES[key].split("|");
       setLookup({ status: "found", name, branch, code: key });
       setGrade(null); setG12(""); setG34("");
+      if (BRIDGE_HC[key] || BRIDGE_MAIN.indexOf(key) >= 0) setBridgeOpen(true);
     } else setLookup({ status: "notfound", name: null, branch: null, code: null });
   };
   const shareText = () => {
@@ -1636,6 +2301,95 @@ function GyeonginiApp() {
   return (
     <ScaleCtx.Provider value={scale}>
       <div style={{ background: C.paper, minHeight: "100vh", width: "100%", overflowX: "hidden", fontFamily: "'Noto Sans KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif" }}>
+
+        {/* 브릿지 시상 대상자 안내 팝업 */}
+        {bridgeOpen && isBridge && (
+          <div onClick={() => setBridgeOpen(false)}
+            style={{ position: "fixed", inset: 0, zIndex: 50, background: "rgba(28,25,23,0.6)", display: "flex", alignItems: "center", justifyContent: "center", padding: f(16) }}>
+            <div onClick={(e) => e.stopPropagation()}
+              style={{ width: "100%", maxWidth: 400, maxHeight: "86vh", overflowY: "auto", background: "#fff", borderRadius: f(24), boxShadow: "0 18px 50px rgba(0,0,0,0.35)" }}>
+
+              <div style={{ padding: `${f(20)}px ${f(18)}px ${f(16)}px`, background: `linear-gradient(140deg, ${C.o500} 0%, ${C.o700} 100%)`, borderTopLeftRadius: f(24), borderTopRightRadius: f(24), textAlign: "center" }}>
+                <div className="flex justify-center"><MascotGuide size={f(58)} happy /></div>
+                <p style={{ marginTop: f(8), fontSize: f(13.5), fontWeight: 800, color: "rgba(255,255,255,0.9)" }}>{lookup.name}님은</p>
+                <p style={{ fontSize: f(22), fontWeight: 900, color: "#fff", lineHeight: 1.3, marginTop: 2 }}>브릿지 시상 대상자예요!</p>
+                <p style={{ fontSize: f(13.5), fontWeight: 700, color: "rgba(255,255,255,0.92)", marginTop: f(6), lineHeight: 1.6 }}>
+                  8월 실적은 이미 인정됐어요.<br />9월 실적만 잊지 말고 챙기시면 지급돼요!
+                </p>
+              </div>
+
+              <div style={{ padding: f(18) }}>
+                {brMain && (
+                  <div className="rounded-2xl" style={{ marginTop: 0, padding: f(16), background: C.teal100, border: "2px solid #B7E5E1" }}>
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      <p style={{ fontSize: f(16), fontWeight: 900, color: C.teal700 }}>{BR2.title}</p>
+                      <span className="rounded-full shrink-0" style={{ padding: `${f(3)}px ${f(8)}px`, background: "#FFF1D6", color: "#8A6100", fontSize: f(11), fontWeight: 900, border: "1px solid #F0D79A" }}>관리실적</span>
+                    </div>
+                    <p style={{ fontSize: f(13), fontWeight: 700, color: C.inkMid, marginTop: 2 }}>{BR2.basis} · {man(BR2.need)}만원 구간 달성</p>
+                    <div className="rounded-xl" style={{ marginTop: f(10), padding: f(13), background: "#fff" }}>
+                      <p style={{ fontSize: f(14), fontWeight: 800, color: C.inkMid }}>{BR2.deadline}까지</p>
+                      <p style={{ fontSize: f(19), fontWeight: 900, color: C.ink, marginTop: 1 }}><span style={{ color: C.teal700 }}>주력보종으로</span> {man(BR2.need)}만원 채우시면</p>
+                      <div className="flex items-baseline gap-1" style={{ marginTop: f(6) }}>
+                        <span style={{ fontSize: f(30), fontWeight: 900, color: C.teal700, fontFeatureSettings: '"tnum"' }}>{man(BR2.pay)}만원</span>
+                      </div>
+                      <p style={{ fontSize: f(13), fontWeight: 800, color: C.teal700 }}>2차년도 지급</p>
+                    </div>
+                    <p style={{ fontSize: f(13.5), fontWeight: 800, color: C.teal700, marginTop: f(8), lineHeight: 1.6 }}>
+                      이미 채우셨다면 그대로 확정이에요!
+                    </p>
+                    <p style={{ fontSize: f(12.5), fontWeight: 700, color: C.inkSoft, marginTop: f(4), lineHeight: 1.6 }}>
+                      · 인정 기간 {BR2.period}<br />· {BR2.scope}
+                    </p>
+                    <div className="rounded-xl" style={{ marginTop: f(8), padding: `${f(10)}px ${f(12)}px`, background: "rgba(255,255,255,0.75)" }}>
+                      <p style={{ fontSize: f(12.5), fontWeight: 900, color: C.teal700 }}>주력보종이란?</p>
+                      <p style={{ fontSize: f(13), fontWeight: 800, color: C.ink, marginTop: 3, lineHeight: 1.65 }}>
+                        {MAIN_PRODUCTS.join(" · ")}
+                      </p>
+                      <p style={{ fontSize: f(12), fontWeight: 700, color: C.inkSoft, marginTop: 3 }}>연만기 · 하이캡 조건 없음</p>
+                    </div>
+                  </div>
+                )}
+
+                {brHC && (
+                  <div className="rounded-2xl" style={{ marginTop: brMain ? f(12) : 0, padding: f(16), background: C.o50, border: `2px solid ${C.o200}` }}>
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      <p style={{ fontSize: f(16), fontWeight: 900, color: C.o700 }}>{BR1.title}</p>
+                      <span className="rounded-full shrink-0" style={{ padding: `${f(3)}px ${f(8)}px`, background: "#FFF1D6", color: "#8A6100", fontSize: f(11), fontWeight: 900, border: "1px solid #F0D79A" }}>관리실적</span>
+                    </div>
+                    <p style={{ fontSize: f(13), fontWeight: 700, color: C.inkMid, marginTop: 2 }}>{BR1.basis} · {brHC}만원 구간 달성</p>
+                    <div className="rounded-xl" style={{ marginTop: f(10), padding: f(13), background: "#fff" }}>
+                      <p style={{ fontSize: f(14), fontWeight: 800, color: C.inkMid }}>{BR1.deadline}까지</p>
+                      <p style={{ fontSize: f(19), fontWeight: 900, color: C.ink, marginTop: 1 }}><span style={{ color: C.o700 }}>고하이캡으로</span> {man(BR1.need)}만원 채우시면</p>
+                      <div className="flex items-baseline gap-1" style={{ marginTop: f(6) }}>
+                        <span style={{ fontSize: f(30), fontWeight: 900, color: C.o700, fontFeatureSettings: '"tnum"' }}>{man(BR1.pay[brHC])}만원</span>
+                      </div>
+                      <p style={{ fontSize: f(13), fontWeight: 800, color: C.o600 }}>2차년도 지급</p>
+                    </div>
+                    <p style={{ fontSize: f(13.5), fontWeight: 800, color: C.o700, marginTop: f(8), lineHeight: 1.6 }}>
+                      이미 채우셨다면 그대로 확정이에요!
+                    </p>
+                    <p style={{ fontSize: f(12.5), fontWeight: 700, color: C.inkSoft, marginTop: f(4), lineHeight: 1.6 }}>
+                      · 인정 기간 {BR1.period}<br />· {BR1.scope}
+                    </p>
+                  </div>
+                )}
+
+                <div className="rounded-2xl" style={{ marginTop: f(12), padding: f(13), background: "#FFF8E8", border: "2px solid #F0D79A" }}>
+                  <p style={{ fontSize: f(13.5), fontWeight: 900, color: "#8A6100" }}>두 시상 모두 관리실적 기준이에요</p>
+                  <p style={{ fontSize: f(12.5), fontWeight: 700, color: "#8A6100", lineHeight: 1.65, marginTop: 3 }}>
+                    집중관리계약, 본인계약 등 일부 계약은 빠지니,<br />알고 계신 실적과 다를 수 있어요.
+                  </p>
+                </div>
+
+                <button type="button" onClick={() => setBridgeOpen(false)} className="w-full rounded-2xl active:scale-[0.98] transition-transform"
+                  style={{ marginTop: f(12), minHeight: f(56), background: C.o600, color: "#fff", fontSize: f(16.5), fontWeight: 900 }}>
+                  확인했어요
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         <style>{`
           @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap');
           input:focus{outline:none}
@@ -1748,6 +2502,24 @@ function GyeonginiApp() {
                         </p>
                       </div>
                     </Card>
+
+                    {/* 브릿지 시상 (대상자만) */}
+                    {isBridge && (
+                      <button type="button" onClick={() => setBridgeOpen(true)}
+                        className="w-full rounded-3xl active:scale-[0.99] transition-transform"
+                        style={{ marginTop: f(14), padding: f(16), background: `linear-gradient(140deg, ${C.o500} 0%, ${C.o700} 100%)`, textAlign: "left", boxShadow: "0 8px 20px rgba(201,68,0,0.28)" }}>
+                        <div className="flex items-center gap-3" style={{ minWidth: 0 }}>
+                          <MascotGuide size={f(44)} happy />
+                          <div style={{ minWidth: 0, flex: 1 }}>
+                            <p style={{ fontSize: f(13.5), fontWeight: 800, color: "rgba(255,255,255,0.9)" }}>브릿지 시상 대상자예요 · 잊지 마세요!</p>
+                            <p style={{ fontSize: f(17), fontWeight: 900, color: "#fff", marginTop: 1, lineHeight: 1.35 }}>
+                              {brHC && brMain ? "2개 시상 조건 확인하기" : brMain ? `${man(BR2.pay)}만원 받을 수 있어요` : `${man(BR1.pay[brHC])}만원 받을 수 있어요`}
+                            </p>
+                          </div>
+                          <span className="rounded-full shrink-0" style={{ padding: `${f(7)}px ${f(12)}px`, background: "rgba(255,255,255,0.24)", color: "#fff", fontSize: f(13), fontWeight: 800 }}>보기</span>
+                        </div>
+                      </button>
+                    )}
 
                     {/* 합계 — 현금 + 포인트 나란히 */}
                     <div ref={sumRef} className="rounded-3xl" style={{ marginTop: f(14), padding: f(18), background: C.charcoal, outline: flash ? `4px solid ${C.gold}` : "4px solid transparent", outlineOffset: 3, transition: "outline-color 400ms" }}>
@@ -1994,6 +2766,18 @@ function GyeonginiApp() {
                           <span style={{ fontSize: f(14.5), fontWeight: 900, color: "#6B4C00" }}>시상 2 · 리딩플래너 시상</span>
                           <span style={{ display: "block", fontSize: f(14), fontWeight: 700, color: "#8A6100", marginTop: 1 }}>관리실적 기준</span>
                         </div>
+                        {isBridge && brMain && (
+                          <div style={{ padding: `${f(8)}px 0`, borderTop: "1px solid rgba(138,97,0,0.15)" }}>
+                            <span style={{ fontSize: f(14.5), fontWeight: 900, color: "#6B4C00" }}>주력보종 브릿지 시상</span>
+                            <span style={{ display: "block", fontSize: f(14), fontWeight: 700, color: "#8A6100", marginTop: 1 }}>관리실적 기준</span>
+                          </div>
+                        )}
+                        {isBridge && brHC && (
+                          <div style={{ padding: `${f(8)}px 0`, borderTop: "1px solid rgba(138,97,0,0.15)" }}>
+                            <span style={{ fontSize: f(14.5), fontWeight: 900, color: "#6B4C00" }}>고하이캡 브릿지 시상</span>
+                            <span style={{ display: "block", fontSize: f(14), fontWeight: 700, color: "#8A6100", marginTop: 1 }}>관리실적 기준</span>
+                          </div>
+                        )}
                       </div>
                       <div className="rounded-2xl" style={{ marginTop: f(10), padding: f(13), background: "rgba(255,255,255,0.7)" }}>
                         <p style={{ fontSize: f(13.5), fontWeight: 700, color: "#6B4C00", lineHeight: 1.7 }}>
